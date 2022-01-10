@@ -17,20 +17,20 @@ Vagrant.configure("2") do |config|
 	apt-get update && apt-get upgrade -y
   SHELL
  
-  # config.vm.provision "docker" do |docker|													# Instalacja Dockera
-    # docker.run "mysql",																		# Uruchomienie obrazu mysql
+  # config.vm.provision "docker" do |docker|										# Instalacja Dockera
+    # docker.run "mysql",												# Uruchomienie obrazu mysql
       # image: "mysql:latest",
       # args: "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=test123"
-    # docker.run "phpmyadmin",																	# Uruchomienie obrazu phpmyadmin
+    # docker.run "phpmyadmin",												# Uruchomienie obrazu phpmyadmin
       # image: "phpmyadmin:latest",
       # args: "-p 8081:80 --link mysql:db"
   # end
 
-  config.vm.provision "file",																	# Kopiowanie pliku na vm	
+  config.vm.provision "file",												# Kopiowanie pliku na vm	
     source: "docker-compose.yml",
     destination: "/home/vagrant/docker-compose.yml"
 	
-  config.vm.provision :docker																	# Instalacja Dockera
-  config.vm.provision :docker_compose, yml: "/home/vagrant/docker-compose.yml", run: "always"	# Instalacja i uruchomienie docker-compose 
+  config.vm.provision :docker												# Instalacja Dockera
+  config.vm.provision :docker_compose, yml: "/home/vagrant/docker-compose.yml", run: "always"				# Instalacja i uruchomienie docker-compose 
 
 end
