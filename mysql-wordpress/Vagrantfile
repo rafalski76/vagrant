@@ -1,0 +1,35 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/focal64"
+  
+  config.vm.network "forwarded_port", guest: 8000, host: 8010
+  
+  config.vm.provider "virtualbox" do |vb|
+	vb.name = "dev-docker"
+	vb.cpus = 1
+	vb.memory = 2048
+	vb.customize ["modifyvm", :id, "--clipboard", "bidirectional"] 
+	vb.gui = false
+  end
+  
+  config.vm.provision "shell", inline: <<-SHELL
+	apt-get update && apt-get upgrade -y
+  SHELL
+ 
+  config.vm.provision "docker" do |docker|													# Instalacja Dockera
+    docker.run "mysql",																		# Uruchomienie obrazu mysql
+      image: "mysql:5.7",
+      args: "-p 3306:3306 -v $PWD/database:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress"
+    docker.run "wordpress",																	# Uruchomienie obrazu phpmyadmin
+      image: "wordpress:latest",
+      args: "-p 8000:80 -v $PWD/html:/var/www/html --link mysql:db -e WORDPRESS_DB_HOST=db -e WORDPRESS_DB_USER=wordpress -e WORDPRESS_DB_PASSWORD=wordpress -e WORDPRESS_DB_NAME=wordpress"
+  end
+  
+  # config.vm.provision "file",																	# Kopiowanie pliku na vm	
+    # source: "docker-compose.yml",
+    # destination: "/home/vagrant/docker-compose.yml"
+	
+  # config.vm.provision :docker																	# Instalacja Dockera
+  # config.vm.provision :docker_compose, yml: "/home/vagrant/docker-compose.yml", run: "always"	# Instalacja i uruchomienie docker-compose 
+
+end
