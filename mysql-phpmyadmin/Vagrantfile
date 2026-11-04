@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
 
-  config.vm.box = "ubuntu/focal64"
+  config.vm.box = "cloud-image/ubuntu-24.04"
   
   config.vm.network "forwarded_port", guest: 8081, host: 8008
   config.vm.network "forwarded_port", guest: 3306, host: 3306
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
       # image: "mysql:latest",
       # args: "-p 3306:3306 -e MYSQL_ROOT_PASSWORD=test123"
     # docker.run "phpmyadmin",												# Uruchomienie obrazu phpmyadmin
-      # image: "phpmyadmin:latest",
+      # image: "phpmyadmin:5",
       # args: "-p 8081:80 --link mysql:db"
   # end
 

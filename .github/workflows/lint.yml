@@ -1,0 +1,44 @@
+name: Lint
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ludeeus/action-shellcheck@2.0.0
+
+  yamllint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: pip install yamllint
+      - run: yamllint -c .yamllint.yml .
+
+  compose-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: |
+          for f in $(git ls-files '*docker-compose.yml'); do
+            echo "== $f"
+            docker compose -f "$f" config --quiet
+          done
+
+  vagrantfiles:
+    name: Vagrantfile syntax
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: |
+          for f in $(git ls-files '*Vagrantfile'); do
+            echo "== $f"
+            ruby -c "$f"
+          done

@@ -1,8 +1,6 @@
-version: '3.7'
-  
 services:
   db:
-    image: mysql:5.7
+    image: mysql:8.4
     volumes:
       - db_data:/var/lib/mysql
     restart: always
@@ -11,7 +9,7 @@ services:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
-    
+
   wordpress:
     depends_on:
       - db
@@ -26,7 +24,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      
+
 volumes:
   db_data: {}
   wordpress_data: {}
